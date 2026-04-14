@@ -1,11 +1,18 @@
+import type { Result } from "neverthrow";
+import { err, ok } from "neverthrow";
+
 export type Point = { x: number; y: number };
 export type Circle = { center: Point; radius: number };
 
 /**
  * Returns the unique circle passing through three non-collinear points.
- * Throws if the points are collinear (no such circle exists).
+ * Returns an Err if the points are collinear (no such circle exists).
  */
-export function circumcircle(a: Point, b: Point, c: Point): Circle {
+export function circumcircle(
+  a: Point,
+  b: Point,
+  c: Point,
+): Result<Circle, "collinear"> {
   // Translate so that `a` is the origin, reducing numerical work.
   const bx = b.x - a.x;
   const by = b.y - a.y;
@@ -16,7 +23,7 @@ export function circumcircle(a: Point, b: Point, c: Point): Circle {
   const d = 2 * (bx * cy - by * cx);
 
   if (Math.abs(d) < 1e-10) {
-    throw new Error("Points are collinear — no circumcircle exists");
+    return err("collinear");
   }
 
   const bb = bx * bx + by * by;
@@ -28,5 +35,5 @@ export function circumcircle(a: Point, b: Point, c: Point): Circle {
   const center: Point = { x: ux + a.x, y: uy + a.y };
   const radius = Math.hypot(ux, uy);
 
-  return { center, radius };
+  return ok({ center, radius });
 }
