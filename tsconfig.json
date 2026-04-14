@@ -2,5 +2,8 @@
 	"extends": [
 		"@tsconfig/node-lts/tsconfig.json",
 		"@tsconfig/node-ts/tsconfig.json"
-	]
+	],
+	"compilerOptions": {
+		"noEmit": true
+	}
 }
