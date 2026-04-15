@@ -1,26 +1,10 @@
 import vue from '@vitejs/plugin-vue';
-import { playwright } from '@vitest/browser-playwright';
-import { defineConfig } from 'vitest/config';
+import { defineProject, mergeConfig } from 'vitest/config';
+import sharedConfig from "../../vitest.shared.ts";
 
-export default defineConfig({
+export default mergeConfig(sharedConfig, defineProject({
 	plugins: [vue()],
 	optimizeDeps: {
 		include: ['vue'],
 	},
-	test: {
-		browser: {
-			enabled: true,
-			provider: playwright(),
-			instances: [{ browser: 'chromium' }],
-		},
-		coverage: {
-			provider: 'v8',
-			thresholds: {
-				functions: 100,
-				branches: 100,
-				lines: 100,
-				statements: 100,
-			},
-		},
-	},
-});
+}));
