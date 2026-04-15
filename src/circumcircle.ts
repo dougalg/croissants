@@ -37,3 +37,33 @@ export function circumcircle(
 
 	return ok({ center, radius });
 }
+
+/**
+ * Returns the length of the arc through a→b→c as a ratio of the circle's circumference,
+ * given the precomputed circumcircle center.
+ */
+export function arcRatio(a: Point, b: Point, c: Point, center: Point): number {
+	const τ = 2 * Math.PI;
+	const angle = (p: Point) => Math.atan2(p.y - center.y, p.x - center.x);
+	const θa = angle(a);
+	const δb = (((angle(b) - θa) % τ) + τ) % τ;
+	const δc = (((angle(c) - θa) % τ) + τ) % τ;
+	return δb < δc ? δc / τ : 1 - δc / τ;
+}
+
+export type CircleArc = Circle & { arcRatio: number };
+
+/**
+ * Returns the circumcircle and arc ratio for three points combined.
+ * Returns an Err if the points are collinear.
+ */
+export function getCircleData(
+	a: Point,
+	b: Point,
+	c: Point,
+): Result<CircleArc, 'collinear'> {
+	return circumcircle(a, b, c).map((circle) => ({
+		...circle,
+		arcRatio: arcRatio(a, b, c, circle.center),
+	}));
+}

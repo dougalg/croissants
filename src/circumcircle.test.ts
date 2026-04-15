@@ -1,6 +1,6 @@
 // https://en.wikipedia.org/wiki/Circumcircle#Circumcircle_equations
 import { assert, describe, expect, it } from 'vitest';
-import { circumcircle } from './circumcircle.ts';
+import { arcRatio, circumcircle, getCircleData } from './circumcircle.ts';
 
 describe('circumcircle', () => {
 	it('finds the unit circle from three points on it', () => {
@@ -64,6 +64,54 @@ describe('circumcircle', () => {
 				{ x: 0, y: 0 },
 				{ x: 1, y: 1 },
 				{ x: 2, y: 2 },
+			)._unsafeUnwrapErr(),
+		).toBe('collinear');
+	});
+});
+
+describe('arcRatio', () => {
+	const origin = { x: 0, y: 0 };
+
+	it('half circle', () => {
+		// (1,0) → (0,1) → (-1,0): 180° CCW = 1/2
+		expect(
+			arcRatio({ x: 1, y: 0 }, { x: 0, y: 1 }, { x: -1, y: 0 }, origin),
+		).toBe(0.5);
+	});
+
+	it('three-quarter arc going counterclockwise', () => {
+		// (1,0) → (0,1) → (0,-1): 270° CCW = 3/4
+		expect(
+			arcRatio({ x: 1, y: 0 }, { x: 0, y: 1 }, { x: 0, y: -1 }, origin),
+		).toBe(0.75);
+	});
+
+	it('three-quarter arc going clockwise', () => {
+		// (1,0) → (0,-1) → (0,1): 270° CW = 3/4
+		expect(
+			arcRatio({ x: 1, y: 0 }, { x: 0, y: -1 }, { x: 0, y: 1 }, origin),
+		).toBe(0.75);
+	});
+});
+
+describe('getCircleData', () => {
+	it('combines circumcircle and arc ratio', () => {
+		// (1,0) → (0,1) → (-1,0): unit circle, half arc
+		expect(
+			getCircleData(
+				{ x: 1, y: 0 },
+				{ x: 0, y: 1 },
+				{ x: -1, y: 0 },
+			)._unsafeUnwrap(),
+		).toEqual({ center: { x: 0, y: 0 }, radius: 1, arcRatio: 0.5 });
+	});
+
+	it('returns Err when the three points are collinear', () => {
+		expect(
+			getCircleData(
+				{ x: 0, y: 0 },
+				{ x: 1, y: 0 },
+				{ x: 2, y: 0 },
 			)._unsafeUnwrapErr(),
 		).toBe('collinear');
 	});
