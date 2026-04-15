@@ -4,6 +4,9 @@ import sharedConfig from "../../vitest.shared.ts";
 
 export default mergeConfig(sharedConfig, defineProject({
 	plugins: [vue()],
+	define: {
+		'process.env': {},
+	},
 	optimizeDeps: {
 		include: ['vue'],
 	},
