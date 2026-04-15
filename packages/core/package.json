@@ -1,0 +1,27 @@
+{
+	"name": "@croissants/core",
+	"version": "1.0.0",
+	"description": "",
+	"type": "module",
+	"main": "index.js",
+	"scripts": {
+		"biome": "biome format",
+		"lint": "tsc",
+		"test": "vitest"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"@tsconfig/node-lts": "^24.0.0",
+		"@tsconfig/node-ts": "^23.6.4",
+		"@vitest/browser-playwright": "^4.1.4",
+		"@vitest/coverage-v8": "4.1.4",
+		"playwright": "^1.59.1",
+		"typescript": "^6.0.2",
+		"vitest": "^4.1.4"
+	},
+	"dependencies": {
+		"neverthrow": "^8.2.0"
+	}
+}
