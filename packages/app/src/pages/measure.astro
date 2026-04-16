@@ -1,9 +1,11 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
 import ImageMeasure from '../components/ImageMeasure.vue';
+import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout>
    <h1>Measure</h1>
-   <ImageMeasure client:load />
+   <div class="max-w-3xl max-h-9/12 mx-auto px-3">
+      <ImageMeasure client:load />
+   </div>
 </BaseLayout>

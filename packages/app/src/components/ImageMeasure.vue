@@ -1,18 +1,18 @@
 <template>
 	<div v-if="imageUrl" class="image-container">
 		<img :src="imageUrl" alt="Loaded" class="image" />
-		<button class="clear-btn" @click="clearImage">Clear</button>
+		<Button variant="destructive" class="clear-btn" @click="clearImage">Clear</Button>
 	</div>
 	<div
 		v-else
 		class="drop-zone"
-		:class="{ 'drop-zone--active': isDragging }"
+		:class="dropZoneVariants({ isDragging })"
 		@drop.prevent="onDrop"
 		@dragover.prevent="onDragOver"
 		@dragleave="onDragLeave"
 	>
 		<p>Drag and drop an image here</p>
-		<button class="load-btn" @click="triggerFileInput">Load image</button>
+		<Button class="load-btn" @click="triggerFileInput">Load image</Button>
 		<input
 			ref="fileInput"
 			type="file"
@@ -24,10 +24,25 @@
 </template>
 
 <script setup lang="ts">
+import { cva } from "class-variance-authority";
 import { ref } from 'vue';
+import "../styles/global.css";
+import Button from './ui/button/Button.vue';
+
+const dropZoneVariants = cva('border-dashed border-2', {
+	variants: {
+		isDragging: {
+			false: 'bg-taupe-50 border-taupe-600',
+			true: 'bg-accent border-accent',
+		}
+	},
+	defaultVariants: {
+		isDragging: false,
+	}
+})
 
 const imageUrl = ref<string | null>(null);
-const isDragging = ref(false);
+const isDragging = ref(true);
 const fileInput = ref<HTMLInputElement | null>(null);
 
 function loadFile(file: File) {
@@ -77,14 +92,8 @@ function clearImage() {
 	justify-content: center;
 	gap: 1rem;
 	padding: 2rem;
-	border: 2px dashed #aaa;
 	border-radius: 8px;
 	cursor: pointer;
-}
-
-.drop-zone--active {
-	border-color: #3b82f6;
-	background-color: #eff6ff;
 }
 
 .file-input {
